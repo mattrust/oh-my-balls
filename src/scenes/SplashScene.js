@@ -2,12 +2,12 @@ import Phaser from 'phaser'
 
 export default class SplashScene extends Phaser.Scene
 {
-	constructor()
-	{
-		super('splash')
-	}
+    constructor()
+    {
+        super('splash')
+    }
 
-	preload()
+    preload()
     {
         this.load.image('splash', 'assets/splash.png')
     }
@@ -15,6 +15,8 @@ export default class SplashScene extends Phaser.Scene
     create()
     {
         this.add.image(400, 300, 'splash')
-        this.scene.start('game')
+        this.input.once('pointerup', function(/** @type {Phaser.Input.Pointer} */ pointer) {
+            this.scene.start('game')
+        }, this)
     }
 }

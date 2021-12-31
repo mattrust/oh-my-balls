@@ -15,13 +15,13 @@
 	},
 	"homepage": "https://github.com/mattrust/oh-my-balls",
 	"devDependencies": {
-		"@babel/core": "^7.10.5",
-		"@babel/plugin-proposal-class-properties": "^7.10.4",
+		"@babel/core": "^7.16.7",
+		"@babel/plugin-proposal-class-properties": "^7.16.7",
 		"babel-eslint": "^10.1.0",
 		"eslint": "^8.5.0",
 		"minimist": ">=1.2.2",
 		"parcel-plugin-clean-easy": "^1.0.2",
-		"parcel-plugin-static-files-copy": "^2.4.3"
+		"parcel-plugin-static-files-copy": "^2.6.0"
 	},
 	"dependencies": {
 		"phaser": "^3.55.2"

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 
 import SplashScene from './scenes/SplashScene'
 import GameScene from './scenes/GameScene'
+import VictoryScene from './scenes/VictoryScene'
 
 const config = {
     type: Phaser.AUTO,
@@ -10,7 +11,7 @@ const config = {
     physics: {
         default: 'arcade'
     },
-    scene: [SplashScene, GameScene]
+    scene: [SplashScene, GameScene, VictoryScene]
 }
 
 export default new Phaser.Game(config)

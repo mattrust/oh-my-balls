@@ -9,6 +9,7 @@ export default class VictoryScene extends Phaser.Scene
 
     create()
     {
-        this.add.image(400, 300, 'splash') // TODO: create image
+        this.add.image(400, 300, 'victory')
+        this.cameras.main.fadeIn(2000, 0, 0, 0)
     }
 }

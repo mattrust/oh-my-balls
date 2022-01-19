@@ -13,6 +13,7 @@ export default class SplashScene extends Phaser.Scene
         this.load.image('victory', 'assets/victory.png')
 
         this.load.image('ball', 'assets/ball.png')
+        this.load.image('bouncer', 'assets/bouncer.png')
         this.load.image('key', 'assets/key.png')
         this.load.image('skull', 'assets/skull.png')
         

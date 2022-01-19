@@ -17,6 +17,7 @@ export default class GameScene extends Phaser.Scene
         this.ballGroup = undefined // sprite group for balls
         this.skullGroup = undefined // sprite group for skulls
         this.keyGroup = undefined // sprite group for keys
+        this.bouncerGroup = undefined // sprite group for bouncers
         this.activeBall = undefined // reference to the selected ball
         this.lineObject = undefined // line object between selected ball and mouse pointer
         this.levelLost = false // level has been lost after a collision
@@ -29,6 +30,7 @@ export default class GameScene extends Phaser.Scene
         this.isRunning = false
 
         this.ballGroup = this.physics.add.group() // must be 'group' because of 'SetVelocity'
+        this.bouncerGroup = this.physics.add.staticGroup()
         this.skullGroup = this.physics.add.staticGroup()
         this.keyGroup = this.physics.add.staticGroup()
 
@@ -51,6 +53,14 @@ export default class GameScene extends Phaser.Scene
             ball.body.setCircle(16)
         }
 
+        // read bouncer parameters from level file
+        for (let i = 0; i < level.bouncers.length; i++) {
+            let bouncer = this.add.sprite(level.bouncers[i].x, level.bouncers[i].y, 'bouncer')
+            this.bouncerGroup.add(bouncer)
+            //bouncer.body.setBounce(1)
+            bouncer.body.setCircle(16)
+        }
+    
         // read key parameters from level file
         for (let i = 0; i < level.keys.length; i++) {
             let key = this.add.image(level.keys[i].x, level.keys[i].y, 'key')
@@ -89,6 +99,7 @@ export default class GameScene extends Phaser.Scene
 
         // install collider callbacks
         this.physics.world.addCollider(this.ballGroup, this.ballGroup, this.onCollisionBall, null, this)
+        this.physics.world.addCollider(this.ballGroup, this.bouncerGroup, this.onCollisionBouncer, null, this)
         this.physics.world.addCollider(this.ballGroup, this.skullGroup, this.onCollisionSkull, null, this)
 
         // we need overlap, otherweise the ball would bounce
@@ -184,6 +195,16 @@ export default class GameScene extends Phaser.Scene
         ball1.play('explosion')
         ball2.play('explosion')
         this.levelLost = true
+    }
+
+    /**
+     * @param {Phaser.GameObjects.GameObject} ball
+     * @param {Phaser.GameObjects.GameObject} bouncer
+     */
+    onCollisionBouncer(ball, bouncer)
+    {
+        if (!this.isRunning) return
+        // TODO: play a sample
     }
 
     /**

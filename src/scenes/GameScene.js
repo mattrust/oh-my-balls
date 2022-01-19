@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import LevelData from '../levels/Default'
+import TitleBar from '../ui/titlebar'
 
 export default class GameScene extends Phaser.Scene
 {
@@ -20,6 +21,7 @@ export default class GameScene extends Phaser.Scene
         this.bouncerGroup = undefined // sprite group for bouncers
         this.activeBall = undefined // reference to the selected ball
         this.lineObject = undefined // line object between selected ball and mouse pointer
+        this.titleBar = undefined // title bar with status information
         this.levelLost = false // level has been lost after a collision
         this.isRunning = false // set this to false when bailing out
         this.ballSpeed = 70 // generic ball speed
@@ -89,6 +91,11 @@ export default class GameScene extends Phaser.Scene
             repeat: 0
         })
 
+        // create title bar
+        this.titleBar = new TitleBar(this)
+        this.titleBar.setKeyNr(this.keyGroup.getLength())
+        this.titleBar.setLevelNr(this.levelIndex)
+
         // create line object
         this.lineObject = this.add.line(0, 0, 0, 0, 0, 0, 0xff0000)
         this.lineObject.setVisible(false)
@@ -104,6 +111,9 @@ export default class GameScene extends Phaser.Scene
 
         // we need overlap, otherweise the ball would bounce
         this.physics.world.addOverlap(this.ballGroup, this.keyGroup, this.onCollisionKey, null, this)
+
+        // set world limits so that the balls don't run into the title bar
+        this.physics.world.setBounds(0, 32, 800, 568)
 
         this.cameras.main.fadeIn(2000, 0, 0, 0)
 
@@ -228,6 +238,7 @@ export default class GameScene extends Phaser.Scene
         if (!this.isRunning) return
 
         key.destroy()
+        this.titleBar.setKeyNr(this.keyGroup.getLength())
     }
 
     /**

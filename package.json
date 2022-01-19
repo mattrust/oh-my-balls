@@ -15,7 +15,7 @@
 	},
 	"homepage": "https://github.com/mattrust/oh-my-balls",
 	"devDependencies": {
-		"@babel/core": "^7.16.7",
+		"@babel/core": "^7.16.10",
 		"@babel/plugin-proposal-class-properties": "^7.16.7",
 		"babel-eslint": "^10.1.0",
 		"eslint": "^8.5.0",

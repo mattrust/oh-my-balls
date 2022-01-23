@@ -45,37 +45,45 @@ export default class GameScene extends Phaser.Scene
         let currentLevel = LevelData.data[this.levelIndex]
 
         // read ball parameters from level file
-        for (let i = 0; i < currentLevel.balls.length; i++) {
-            let x = currentLevel.balls[i].x
-            let y = currentLevel.balls[i].y
-            let a = currentLevel.balls[i].a
-            let ball = this.add.sprite(x, y, 'ball') // must be sprite because of expl. animation
-            this.ballGroup.add(ball)
-            this.physics.moveTo(ball, x + Math.cos(a), y + Math.sin(a), this.ballSpeed)
-            ball.body.setBounce(1)
-            ball.body.setCollideWorldBounds(true)
-            ball.body.setCircle(16)
+        if (currentLevel.balls !== undefined) {
+            for (let i = 0; i < currentLevel.balls.length; i++) {
+                let x = currentLevel.balls[i].x
+                let y = currentLevel.balls[i].y
+                let a = currentLevel.balls[i].a
+                let ball = this.add.sprite(x, y, 'ball') // must be sprite because of expl. animation
+                this.ballGroup.add(ball)
+                this.physics.moveTo(ball, x + Math.cos(a), y + Math.sin(a), this.ballSpeed)
+                ball.body.setBounce(1)
+                ball.body.setCollideWorldBounds(true)
+                ball.body.setCircle(16)
+            }
         }
 
         // read bouncer parameters from level file
-        for (let i = 0; i < currentLevel.bouncers.length; i++) {
-            let bouncer = this.add.sprite(currentLevel.bouncers[i].x, currentLevel.bouncers[i].y, 'bouncer')
-            this.bouncerGroup.add(bouncer)
-            bouncer.body.setCircle(16)
-        }
+        if (currentLevel.bouncers !== undefined) {
+            for (let i = 0; i < currentLevel.bouncers.length; i++) {
+                let bouncer = this.add.sprite(currentLevel.bouncers[i].x, currentLevel.bouncers[i].y, 'bouncer')
+                this.bouncerGroup.add(bouncer)
+                bouncer.body.setCircle(16)
+            }
+        }   
     
         // read key parameters from level file
-        for (let i = 0; i < currentLevel.keys.length; i++) {
-            let key = this.add.image(currentLevel.keys[i].x, currentLevel.keys[i].y, 'key')
-            this.keyGroup.add(key)
-            key.body.setCircle(16)
+        if (currentLevel.keys !== undefined) {
+            for (let i = 0; i < currentLevel.keys.length; i++) {
+                let key = this.add.image(currentLevel.keys[i].x, currentLevel.keys[i].y, 'key')
+                this.keyGroup.add(key)
+                key.body.setCircle(16)
+            }
         }
 
         // read skull parameters from level file
-        for (let i = 0; i < currentLevel.skulls.length; i++) {
-            let skull = this.add.image(currentLevel.skulls[i].x, currentLevel.skulls[i].y, 'skull')
-            this.skullGroup.add(skull)
-            skull.body.setCircle(16)
+        if (currentLevel.skulls !== undefined) {
+            for (let i = 0; i < currentLevel.skulls.length; i++) {
+                let skull = this.add.image(currentLevel.skulls[i].x, currentLevel.skulls[i].y, 'skull')
+                this.skullGroup.add(skull)
+                skull.body.setCircle(16)
+            }
         }
 
         // we need at least one ball and one key

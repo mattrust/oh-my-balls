@@ -44,21 +44,6 @@ export default class GameScene extends Phaser.Scene
         console.log('reading levelindex', this.levelIndex)
         let currentLevel = LevelData.data[this.levelIndex]
 
-        // read ball parameters from level file
-        if (currentLevel.balls !== undefined) {
-            for (let i = 0; i < currentLevel.balls.length; i++) {
-                let x = currentLevel.balls[i].x
-                let y = currentLevel.balls[i].y
-                let a = currentLevel.balls[i].a
-                let ball = this.add.sprite(x, y, 'ball') // must be sprite because of expl. animation
-                this.ballGroup.add(ball)
-                this.physics.moveTo(ball, x + Math.cos(a), y + Math.sin(a), this.ballSpeed)
-                ball.body.setBounce(1)
-                ball.body.setCollideWorldBounds(true)
-                ball.body.setCircle(16)
-            }
-        }
-
         // read bouncer parameters from level file
         if (currentLevel.bouncers !== undefined) {
             for (let i = 0; i < currentLevel.bouncers.length; i++) {
@@ -83,6 +68,21 @@ export default class GameScene extends Phaser.Scene
                 let skull = this.add.image(currentLevel.skulls[i].x, currentLevel.skulls[i].y, 'skull')
                 this.skullGroup.add(skull)
                 skull.body.setCircle(16)
+            }
+        }
+
+        // read ball parameters from level file
+        if (currentLevel.balls !== undefined) {
+            for (let i = 0; i < currentLevel.balls.length; i++) {
+                let x = currentLevel.balls[i].x
+                let y = currentLevel.balls[i].y
+                let a = currentLevel.balls[i].a
+                let ball = this.add.sprite(x, y, 'ball') // must be sprite because of expl. animation
+                this.ballGroup.add(ball)
+                this.physics.moveTo(ball, x + Math.cos(a), y + Math.sin(a), this.ballSpeed)
+                ball.body.setBounce(1)
+                ball.body.setCollideWorldBounds(true)
+                ball.body.setCircle(16)
             }
         }
 

@@ -18,6 +18,9 @@ export default class SplashScene extends Phaser.Scene
         this.load.image('skull', 'assets/skull.png')
         
         this.load.spritesheet('explosion', 'assets/explosion.png',  { frameWidth: 64, frameHeight: 64 })
+
+        this.load.audio('explosion', ['assets/explosion.ogg'])
+        this.load.audio('pickedkey', ['assets/pickedkey.ogg'])
     }
 
     create()

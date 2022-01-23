@@ -25,6 +25,8 @@ export default class GameScene extends Phaser.Scene
         this.levelLost = false // level has been lost after a collision
         this.isRunning = false // set this to false when bailing out
         this.ballSpeed = 70 // generic ball speed
+        this.explosion = undefined
+        this.pickedkey = undefined
     }
 
     create()
@@ -99,6 +101,10 @@ export default class GameScene extends Phaser.Scene
             frameRate: 15,
             repeat: 0
         })
+
+        // create sounds
+        this.explosion = this.sound.add("explosion", { loop: false });
+        this.pickedkey = this.sound.add("pickedkey", { loop: false });
 
         // create title bar
         this.titleBar = new TitleBar(this)
@@ -213,6 +219,7 @@ export default class GameScene extends Phaser.Scene
 
         ball1.play('explosion')
         ball2.play('explosion')
+        this.explosion.play()
         this.levelLost = true
     }
 
@@ -235,6 +242,7 @@ export default class GameScene extends Phaser.Scene
         if (!this.isRunning) return
 
         ball.play('explosion')
+        this.explosion.play()
         this.levelLost = true
     }
 
@@ -247,6 +255,7 @@ export default class GameScene extends Phaser.Scene
         if (!this.isRunning) return
 
         key.destroy()
+        this.pickedkey.play()
         this.titleBar.setKeyNr(this.keyGroup.getLength())
     }
 

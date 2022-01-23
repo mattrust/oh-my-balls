@@ -39,14 +39,16 @@ export default class GameScene extends Phaser.Scene
         this.activeBall = undefined
         this.levelLost = false
 
+        this.levelIndex = this.readLevelStorage()
+
         console.log('reading levelindex', this.levelIndex)
-        const level = LevelData[this.levelIndex]
+        let currentLevel = LevelData.data[this.levelIndex]
 
         // read ball parameters from level file
-        for (let i = 0; i < level.balls.length; i++) {
-            let x = level.balls[i].x
-            let y = level.balls[i].y
-            let a = level.balls[i].a
+        for (let i = 0; i < currentLevel.balls.length; i++) {
+            let x = currentLevel.balls[i].x
+            let y = currentLevel.balls[i].y
+            let a = currentLevel.balls[i].a
             let ball = this.add.sprite(x, y, 'ball') // must be sprite because of expl. animation
             this.ballGroup.add(ball)
             this.physics.moveTo(ball, x + Math.cos(a), y + Math.sin(a), this.ballSpeed)
@@ -56,23 +58,22 @@ export default class GameScene extends Phaser.Scene
         }
 
         // read bouncer parameters from level file
-        for (let i = 0; i < level.bouncers.length; i++) {
-            let bouncer = this.add.sprite(level.bouncers[i].x, level.bouncers[i].y, 'bouncer')
+        for (let i = 0; i < currentLevel.bouncers.length; i++) {
+            let bouncer = this.add.sprite(currentLevel.bouncers[i].x, currentLevel.bouncers[i].y, 'bouncer')
             this.bouncerGroup.add(bouncer)
-            //bouncer.body.setBounce(1)
             bouncer.body.setCircle(16)
         }
     
         // read key parameters from level file
-        for (let i = 0; i < level.keys.length; i++) {
-            let key = this.add.image(level.keys[i].x, level.keys[i].y, 'key')
+        for (let i = 0; i < currentLevel.keys.length; i++) {
+            let key = this.add.image(currentLevel.keys[i].x, currentLevel.keys[i].y, 'key')
             this.keyGroup.add(key)
             key.body.setCircle(16)
         }
 
         // read skull parameters from level file
-        for (let i = 0; i < level.skulls.length; i++) {
-            let skull = this.add.image(level.skulls[i].x, level.skulls[i].y, 'skull')
+        for (let i = 0; i < currentLevel.skulls.length; i++) {
+            let skull = this.add.image(currentLevel.skulls[i].x, currentLevel.skulls[i].y, 'skull')
             this.skullGroup.add(skull)
             skull.body.setCircle(16)
         }
@@ -127,17 +128,17 @@ export default class GameScene extends Phaser.Scene
         // check for number of uncollected keys
         if (this.keyGroup.getLength() == 0) {
             console.log('no more keys')
+            this.levelIndex++
             // do we have the last entry in the level file?
-            if (this.levelIndex + 1 >= LevelData.length) {
+            if (this.levelIndex >= LevelData.data.length) {
                 this.bailOut(true)
-                return
             }
             else {
                 // restart with next level file
-                this.levelIndex++
                 this.bailOut(false)
-                return
             }
+            this.writeLevelStorage()
+            return
         }
 
         // we have lost this level because of a crash
@@ -251,8 +252,7 @@ export default class GameScene extends Phaser.Scene
         this.cameras.main.fadeOut(2000, 0, 0, 0)
         this.activeBall = undefined
         this.lineObject.setVisible(false)
-        if (victory)
-        {
+        if (victory) {
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
                 this.scene.start('victory')
             })
@@ -262,5 +262,27 @@ export default class GameScene extends Phaser.Scene
                 this.scene.restart()
             })
         }
+    }
+
+    readLevelStorage()
+    {
+        let retval = 0
+        let levelVersion = localStorage.getItem('omb-levelversion')
+        let levelIndex = 0
+        if (levelVersion === LevelData.version) {
+            levelIndex = parseInt(localStorage.getItem('omb-levelindex'))
+            if (levelIndex < LevelData.data.length) {
+                retval = levelIndex
+            }
+        }
+        console.log('readLevelStorage version', levelVersion, 'index', levelIndex, 'retval', retval)
+        return retval
+    }
+
+    writeLevelStorage()
+    {
+        localStorage.setItem('omb-levelversion', LevelData.version)
+        localStorage.setItem('omb-levelindex', this.levelIndex.toString())
+        console.log('writeLevelStorage version', LevelData.version, 'index', this.levelIndex)
     }
 }
